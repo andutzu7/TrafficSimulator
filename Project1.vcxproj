@@ -116,10 +116,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="OLD GARBAGE CODE" />
+    <ClCompile Include="PlayerCar.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Car.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
+    <ClInclude Include="PlayerCar.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
