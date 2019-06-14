@@ -1,32 +1,37 @@
 ﻿  Main.cpp
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(20): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(36): warning C4244: 'argument': conversion from 'const T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(22): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(38): warning C4244: 'argument': conversion from 'const T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(25): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(41): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(27): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(46): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(29): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(51): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(62): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
   Generating code
-  2 of 799 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  2 of 870 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project1.vcxproj -> D:\interesting shit\Traffic simulator\Project1\Release\Project1.exe

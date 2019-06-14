@@ -6,7 +6,7 @@
 class Car
 {
 private:
-	Vec2 position;// to make it const 
+     Vec2 position;// to make it const 
 	//only for the other cars Vec2 velocity;//movement over time
     size_t statesNumber; //nr of sprites for a single object
 protected:
@@ -20,8 +20,15 @@ protected:
 	{
 		position = pos;
 	}
-public://de adaugat gettere
+public:
+	~Car()
+	{
+		carState.clear();
+	}
 	std::map < const char*, olc::Sprite*> carState; //keeping track of the sprite positions by straight up name instead of a big ol switch
 	virtual void SetSpriteMap() = 0;
-
+	const Vec2 GetPosition() const
+	{
+		return position;
+	}
 };
