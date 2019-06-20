@@ -27,6 +27,9 @@
     <ClCompile Include="OLD GARBAGE CODE">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ObstacleCar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vec2.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleCar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

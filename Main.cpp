@@ -14,6 +14,8 @@ Vec2 carPos(ScreenWidth/ 2 - 40, 450); //40 e 1/2 din playerWidth
 PlayerCar c(carPos);
 float traveledDistance = 0.0f;
 float velocity = 0.0f;
+olc::Sprite* sky;
+
 ///////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 class Game : public olc::PixelGameEngine
@@ -62,7 +64,18 @@ public:
 					grassC = olc::DARK_GREEN;
 				///EXPERIMENTAL ONE LINE IF, DONT WORRY IT S COOL
 				borderS = borderShade > 0.0f ? olc::RED : olc::WHITE;
+				
 				const size_t rowNumber = ScreenWidth() / 2 + y;
+			
+				olc::Pixel middleLineColor;
+				
+				float middleLineShade = std::sin(80.0f* std::pow(1.0f - perspective, 3) + traveledDistance * 0.1f); //aici folosesc lambda ul
+				
+				if (middleLineShade > 0.0f)
+					middleLineColor = olc::VERY_DARK_GREY;
+				else
+					middleLineColor = olc::WHITE;
+				
 				if (x >= 0 && x < leftGrass)
 				{
 					Draw(x, rowNumber, grassC);
@@ -83,11 +96,12 @@ public:
 				{
 					Draw(x, rowNumber, grassC);
 				}
-				/*if (x >= MiddlePoint * ScreenWidth() - 1 && x <= MiddlePoint * ScreenWidth() + 1)
+				
+				if (x >= MiddlePoint * ScreenWidth() - 1 && x <= MiddlePoint * ScreenWidth() + 1)
 				{   //LINIA CENTRALA
-					if (rowNumber % 10 > 5) // Am incropit o conditie 100% originala si sint mindru
-						Draw(x, rowNumber, olc::BLA1CK);
-				}*/
+				//	if (rowNumber % 10 > 5) // Am incropit o conditie 100% originala si sint mindru
+						Draw(x, rowNumber, middleLineColor);
+				}
 
 			}
 	}
@@ -155,15 +169,18 @@ public:
 	}
 	bool OnUserCreate() override
 	{
-	
+		sky = new olc::Sprite("D:\\interesting shit\\Traffic simulator\\Project1\\Project1\\Road\\Sky.png");
 		return true;
 	}
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		ClearScreen();
+		//ClearScreen();//draw sky
+		SetPixelMode(olc::Pixel::ALPHA);
+
+		DrawSprite(-100, -100, sky,3);
+		SetPixelMode(olc::Pixel::NORMAL);
 		DrawTrack();
 		Dravv(fElapsedTime);
-		std::cout << carPos.x << " ";
 		return true;
 	}
 };
