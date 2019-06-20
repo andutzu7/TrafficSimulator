@@ -1,45 +1,65 @@
 ﻿  Main.cpp
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(32): warning C4018: '<': signed/unsigned mismatch
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(33): warning C4018: '<': signed/unsigned mismatch
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(48): warning C4244: 'initializing': conversion from 'float' to 'size_t', possible loss of data
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(49): warning C4244: 'initializing': conversion from 'float' to 'size_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(34): warning C4018: '<': signed/unsigned mismatch
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(35): warning C4018: '<': signed/unsigned mismatch
 d:\interesting shit\traffic simulator\project1\project1\main.cpp(50): warning C4244: 'initializing': conversion from 'float' to 'size_t', possible loss of data
 d:\interesting shit\traffic simulator\project1\project1\main.cpp(51): warning C4244: 'initializing': conversion from 'float' to 'size_t', possible loss of data
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(95): warning C4018: '<': signed/unsigned mismatch
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(119): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(52): warning C4244: 'initializing': conversion from 'float' to 'size_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(53): warning C4244: 'initializing': conversion from 'float' to 'size_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(97): warning C4018: '<': signed/unsigned mismatch
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(124): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(123): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(125): warning C4244: 'argument': conversion from 'const T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(131): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(129): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(140): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(139): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(147): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(150): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(156): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(159): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
           with
           [
               T=float
           ]
-d:\interesting shit\traffic simulator\project1\project1\main.cpp(158): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(169): warning C4244: 'argument': conversion from 'T' to 'int32_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(171): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(183): warning C4244: 'argument': conversion from 'int32_t' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(197): warning C4244: 'argument': conversion from 'int32_t' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\interesting shit\traffic simulator\project1\project1\main.cpp(197): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   Generating code
-  1 of 826 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 846 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    10 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project1.vcxproj -> D:\interesting shit\Traffic simulator\Project1\Release\Project1.exe

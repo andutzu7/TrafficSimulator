@@ -6,6 +6,8 @@
 #include <cmath>
 #include <memory>
 #include "Tile.h"
+#include "ObstacleCar.h"
+
 ///TO ADD MOVEMENT BASED ON TIME(aka real life physics + acceleration+more comments+  TO THE PLAYEER aand also make it use velocity
 ///////////////////////VARIABLES AREA\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -15,7 +17,7 @@ PlayerCar c(carPos);
 float traveledDistance = 0.0f;
 float velocity = 0.0f;
 olc::Sprite* sky;
-
+ObstacleCar* o;
 ///////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 class Game : public olc::PixelGameEngine
@@ -111,18 +113,24 @@ public:
 		//pt ca na, nu arata bine
 		SetPixelMode(olc::Pixel::ALPHA);
 		//asta e o fct ce tine de engine, care deseneaza pixelii din png in functie de transparenta lor
-	
+
+		//new obstacle stuff
+		Vec2 newObstaclePos = o->GetPosition();
+		
 		if (velocity < 0.0f)
 			velocity = 0.0f;
 		if (velocity > 1.0f)
 			velocity = 1.0f;
 		DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
+		DrawSprite(o->GetPosition().x, o->GetPosition().y, o->GetSprite(),2);
 		if (GetKey(olc::Key::RIGHT).bHeld)
 		{
 			carPos.x += 3.0f;
 			DrawSprite(carPos.x, carPos.y, c.carState["Right"], 2);
 			traveledDistance += 200.0f*velocity*fElapsedTime;
 			velocity += 2.0f*fElapsedTime;
+			newObstaclePos.y+=10;
+			o->SetPosition(newObstaclePos);
 		}
 		 else
  
@@ -132,6 +140,8 @@ public:
 				carPos.x -= 3.0f;
 				traveledDistance += 200.0f*velocity*fElapsedTime;
 				velocity += 2.0f*fElapsedTime;
+				newObstaclePos.y+=10;
+				o->SetPosition(newObstaclePos);
 			}
 		else
 		
@@ -140,6 +150,8 @@ public:
 				DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
 				traveledDistance += 200.0f*velocity*fElapsedTime;
 				velocity += 2.0f*fElapsedTime;
+				newObstaclePos.y+=10;
+				o->SetPosition(newObstaclePos);
 			}
 		else 
   			if (GetKey(olc::Key::DOWN).bHeld)
@@ -148,7 +160,8 @@ public:
 					traveledDistance += 50.0f * velocity*fElapsedTime;
 
 					velocity -= 1.8f*velocity*fElapsedTime;
-				
+					newObstaclePos.y--;
+					o->SetPosition(newObstaclePos);
 			}
 				else
 				{
@@ -156,11 +169,20 @@ public:
 					DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
 					traveledDistance += 200 * velocity*fElapsedTime;
 					velocity -= 1.0*fElapsedTime;
-
+					newObstaclePos.y--;
+					o->SetPosition(newObstaclePos);
 				}
 		SetPixelMode(olc::Pixel::NORMAL);
 		//asta e ca sa revina totul la normal
+		if (o->GetPosition().y > ScreenHeight() + 10) //daca a iesit din ecran
+		{
+			delete o;
+			int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
+			while (carnumber == 0)
+				carnumber = rand() % 4;
+			o = new ObstacleCar(Vec2(255, rand() % ScreenHeight()), rand() % 4);
 
+		}
 	}
 	void ClearScreen()//the usual cleaning screen function called every frame
 	{
@@ -169,6 +191,10 @@ public:
 	}
 	bool OnUserCreate() override
 	{
+		int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
+		while (carnumber == 0)
+			carnumber = rand() % 4;
+		o = new ObstacleCar(Vec2(rand() % ScreenWidth()+100, rand() % ScreenHeight()),carnumber);
 		sky = new olc::Sprite("D:\\interesting shit\\Traffic simulator\\Project1\\Project1\\Road\\Sky.png");
 		return true;
 	}
@@ -180,6 +206,7 @@ public:
 		DrawSprite(-100, -100, sky,3);
 		SetPixelMode(olc::Pixel::NORMAL);
 		DrawTrack();
+		std::cout << o->GetPosition().y<<" ";
 		Dravv(fElapsedTime);
 		return true;
 	}

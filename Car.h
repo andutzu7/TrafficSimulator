@@ -16,10 +16,6 @@ protected:
 			statesNumber = s_nr;
 
 	}
-	void SetPosition(const Vec2& pos)
-	{
-		position = pos;
-	}
 public:
 	~Car()
 	{
@@ -30,5 +26,9 @@ public:
 	const Vec2 GetPosition() const
 	{
 		return position;
+	}
+	void SetPosition(const Vec2& pos)
+	{
+		position = pos;
 	}
 };

@@ -3,8 +3,11 @@
 class ObstacleCar:public Car
 {
 private:
+	bool hasBeenHit = false;
+	olc::Sprite* whichCar;
 	void SetSpriteMap();
 public:
-	ObstacleCar(const Vec2& startPosition, const size_t& statesNumber = 7);//initial sunt 7 in proiectul meu
+	ObstacleCar(const Vec2& startPosition,const int& carNumber);
+	olc::Sprite* GetSprite() const;
 };
 
