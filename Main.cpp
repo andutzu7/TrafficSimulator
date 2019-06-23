@@ -7,7 +7,7 @@
 #include <memory>
 #include "Tile.h"
 #include "ObstacleCar.h"
-
+//DE ADAUGAT LOGO SAU CV JOS CA SA NU SE MAI VADA BUGU ALA
 ///TO ADD MOVEMENT BASED ON TIME(aka real life physics + acceleration+more comments+  TO THE PLAYEER aand also make it use velocity
 ///////////////////////VARIABLES AREA\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -18,6 +18,7 @@ float traveledDistance = 0.0f;
 float velocity = 0.0f;
 olc::Sprite* sky;
 ObstacleCar* o;
+bool baccOnTracc;
 ///////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 class Game : public olc::PixelGameEngine
@@ -25,7 +26,7 @@ class Game : public olc::PixelGameEngine
 public:
 	Game()
 	{
-		sAppName = "Crasher";
+		sAppName = "C++ Finale";
 	}
 public:
 	
@@ -43,8 +44,8 @@ public:
 				mic, si totodata ni se pare ca distanta se mareste. Chiar am inteles o si e smechera, o s o mai folosesc
 				*/
 				float MiddlePoint = 0.5f; //mijlocu ecranului
-				float roadWidth = 0.1f + perspective * 0.8f;//latimea drumului
-				float clipWidth = roadWidth * 0.15f;//latimea marginilor miscatoare
+				float roadWidth = 0.3f + perspective * 0.8f;//latimea drumului
+				float clipWidth = roadWidth * 0.05f;//latimea marginilor miscatoare
 			///Aici detemrin exact puntele. Avem mijlocul ecranului
 				roadWidth *= 0.5f;//injumatatim latimea drumului
 				size_t leftGrass = (MiddlePoint - roadWidth - clipWidth)*ScreenWidth();
@@ -65,7 +66,7 @@ public:
 				else
 					grassC = olc::DARK_GREEN;
 				///EXPERIMENTAL ONE LINE IF, DONT WORRY IT S COOL
-				borderS = borderShade > 0.0f ? olc::RED : olc::WHITE;
+				borderS = borderShade > 0.0f ? olc::VERY_DARK_GREY : olc::WHITE;
 				
 				const size_t rowNumber = ScreenWidth() / 2 + y;
 			
@@ -160,7 +161,7 @@ public:
 					traveledDistance += 50.0f * velocity*fElapsedTime;
 
 					velocity -= 1.8f*velocity*fElapsedTime;
-					newObstaclePos.y--;
+					newObstaclePos.y-=10;
 					o->SetPosition(newObstaclePos);
 			}
 				else
@@ -169,10 +170,17 @@ public:
 					DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
 					traveledDistance += 200 * velocity*fElapsedTime;
 					velocity -= 1.0*fElapsedTime;
-					newObstaclePos.y--;
+					newObstaclePos.y-=10;
 					o->SetPosition(newObstaclePos);
 				}
 		SetPixelMode(olc::Pixel::NORMAL);
+		if (o->GetPosition().y < ScreenHeight()/1.8f && velocity <=	0.0f) //daca playerul sta pe loc in loc sa zboare masina o fac sa dispara din raza  vizuala
+		{
+		
+			delete o;
+			o = new ObstacleCar();
+			baccOnTracc = false;
+		}
 		//asta e ca sa revina totul la normal
 		if (o->GetPosition().y > ScreenHeight() + 10) //daca a iesit din ecran
 		{
@@ -180,8 +188,23 @@ public:
 			int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
 			while (carnumber == 0)
 				carnumber = rand() % 4;
-			o = new ObstacleCar(Vec2(255, rand() % ScreenHeight()), rand() % 4);
+			o = new ObstacleCar(Vec2(rand() % (ScreenHeight()/2) + ScreenHeight() / 3, ScreenHeight() / 1.8f),carnumber);
 
+		}
+		//asta e in cazul in care eram pe loc si m am repus in miscare
+		if (!baccOnTracc) ///cod de smecher ortodox
+		{
+			if (velocity >= 0.1f)//verificam daca ne am repus in miscare
+			{
+				baccOnTracc = true;
+				int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
+
+				while (carnumber == 0)
+					carnumber = rand() % 4;
+
+				o = new ObstacleCar(Vec2(rand() % (ScreenHeight()) + ScreenHeight() / 3, ScreenHeight() / 1.8f), carnumber);
+				//generam un nou obstacol care sa apara la orizont
+			}
 		}
 	}
 	void ClearScreen()//the usual cleaning screen function called every frame
@@ -194,20 +217,19 @@ public:
 		int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
 		while (carnumber == 0)
 			carnumber = rand() % 4;
-		o = new ObstacleCar(Vec2(rand() % ScreenWidth()+100, rand() % ScreenHeight()),carnumber);
+		o = new ObstacleCar(Vec2(rand()%(ScreenHeight()/2)+ScreenHeight()/3, (ScreenHeight()/1.8f)),2);
 		sky = new olc::Sprite("D:\\interesting shit\\Traffic simulator\\Project1\\Project1\\Road\\Sky.png");
 		return true;
 	}
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		//ClearScreen();//draw sky
+		ClearScreen();
 		SetPixelMode(olc::Pixel::ALPHA);
-
-		DrawSprite(-100, -100, sky,3);
+		DrawSprite(-100, -100, sky,3); //drawing the sky
 		SetPixelMode(olc::Pixel::NORMAL);
 		DrawTrack();
-		std::cout << o->GetPosition().y<<" ";
 		Dravv(fElapsedTime);
+		
 		return true;
 	}
 };
@@ -216,6 +238,5 @@ int main()
 	Game demo;
 	if (demo.Construct(650, 550, 1, 1))
 		demo.Start();
-	
 	return 0;
 }
