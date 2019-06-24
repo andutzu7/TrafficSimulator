@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include <memory>
+#include <chrono>
 #include "Tile.h"
 #include "ObstacleCar.h"
 //DE ADAUGAT LOGO SAU CV JOS CA SA NU SE MAI VADA BUGU ALA
@@ -18,7 +19,12 @@ float traveledDistance = 0.0f;
 float velocity = 0.0f;
 olc::Sprite* sky;
 ObstacleCar* o;
+const float acceleration = 9.8f;
 bool baccOnTracc;
+int timePoint=-1;
+int actualTime=0;
+float speed;
+float incrementValue = 0.5f;// ca sa cresc viteza cat timp apas pe o tasta, sa fie speedin
 ///////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 class Game : public olc::PixelGameEngine
@@ -29,7 +35,51 @@ public:
 		sAppName = "C++ Finale";
 	}
 public:
-	
+	void PrintStatus()
+	{
+		DrawString(0, ScreenHeight() - 20, "Traveled distance: ", olc::BLACK);//Traveled distance
+		DrawString(0, ScreenHeight()-10, std::to_string(traveledDistance), olc::BLACK);
+		DrawString(0, ScreenHeight() - 40, "Speed: ", olc::BLACK);//Traveled distance
+		DrawString(0, ScreenHeight() - 30, std::to_string(speed), olc::BLACK);
+
+ 		
+	}
+	void SpawnObstacle()
+	{
+		if (o->GetPosition().y < ScreenHeight() / 1.2f && velocity <= 0.0f) //daca playerul sta pe loc in loc sa zboare masina o fac sa dispara din raza  vizuala
+		{
+
+			delete o;
+			o = new ObstacleCar();
+			baccOnTracc = false;
+		}
+		//asta e ca sa revina totul la normal
+		if (o->GetPosition().y > ScreenHeight() + 10) //daca a iesit din ecran
+		{
+			delete o;
+			int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
+			while (carnumber == 0)
+				carnumber = rand() % 4;
+			o = new ObstacleCar(Vec2(rand() % (ScreenHeight() / 2) + ScreenHeight() / 3 - 20, ScreenHeight() / 1.8f), carnumber);
+
+		}
+		//asta e in cazul in care eram pe loc si m am repus in miscare
+		if (!baccOnTracc) ///cod de smecher ortodox
+		{
+			if (velocity >= 0.1f)//verificam daca ne am repus in miscare
+			{
+				baccOnTracc = true;
+				int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
+
+				while (carnumber == 0)
+					carnumber = rand() % 4;
+
+			 	o = new ObstacleCar(Vec2(rand() % (ScreenHeight()) + ScreenHeight() / 3, ScreenHeight() / 1.8f), carnumber);
+				//generam un nou obstacol care sa apara la orizont
+			}
+		}
+
+	}
 	void DrawTrack()
 	{
 		for (size_t y = 0; y < ScreenHeight() / 2; y++) //iteram prin tot ecranu ca sav vedem daca e iarba margine sau drum
@@ -118,6 +168,7 @@ public:
 		//new obstacle stuff
 		Vec2 newObstaclePos = o->GetPosition();
 		
+		//metinem velocitatea in parametri normali
 		if (velocity < 0.0f)
 			velocity = 0.0f;
 		if (velocity > 1.0f)
@@ -126,11 +177,16 @@ public:
 		DrawSprite(o->GetPosition().x, o->GetPosition().y, o->GetSprite(),2);
 		if (GetKey(olc::Key::RIGHT).bHeld)
 		{
-			carPos.x += 3.0f;
 			DrawSprite(carPos.x, carPos.y, c.carState["Right"], 2);
-			traveledDistance += 200.0f*velocity*fElapsedTime;
+			carPos.x += 3.0f;
 			velocity += 2.0f*fElapsedTime;
-			newObstaclePos.y+=10;
+			traveledDistance += speed;
+			if (speed < 25.0f)
+			speed += incrementValue;
+			if (speed > 0.0f)
+				newObstaclePos.y += speed / 4;
+			else
+				newObstaclePos.y += 5;
 			o->SetPosition(newObstaclePos);
 		}
 		 else
@@ -139,9 +195,14 @@ public:
 			{
 				DrawSprite(carPos.x, carPos.y, c.carState["LeftMost"], 2);
 				carPos.x -= 3.0f;
-				traveledDistance += 200.0f*velocity*fElapsedTime;
 				velocity += 2.0f*fElapsedTime;
-				newObstaclePos.y+=10;
+				traveledDistance += speed;
+				if (speed < 25.0f)
+				speed += incrementValue;
+				if (speed > 0.0f)
+					newObstaclePos.y += speed / 4;
+				else
+					newObstaclePos.y -= 5;
 				o->SetPosition(newObstaclePos);
 			}
 		else
@@ -149,63 +210,56 @@ public:
 			if (GetKey(olc::Key::UP).bHeld)
 			{
 				DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
-				traveledDistance += 200.0f*velocity*fElapsedTime;
+				velocity += acceleration*fElapsedTime;
+				traveledDistance += speed;
 				velocity += 2.0f*fElapsedTime;
-				newObstaclePos.y+=10;
+				if (speed < 25.0f)
+				speed += incrementValue;
+				if (speed > 0.0f)
+					newObstaclePos.y += speed / 4;
+				else
+					newObstaclePos.y -= 5;
 				o->SetPosition(newObstaclePos);
 			}
 		else 
   			if (GetKey(olc::Key::DOWN).bHeld)
 				{
 					DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
-					traveledDistance += 50.0f * velocity*fElapsedTime;
-
 					velocity -= 1.8f*velocity*fElapsedTime;
-					newObstaclePos.y-=10;
+					traveledDistance += speed;
+					if (speed > 0.0f)
+					{
+						newObstaclePos.y += speed / 4;
+						speed -= 2*incrementValue;
+					}
+					else
+					{
+						speed = 0;
+						newObstaclePos.y -= 5;
+
+					}
 					o->SetPosition(newObstaclePos);
 			}
 				else
 				{
 
 					DrawSprite(carPos.x, carPos.y, c.carState["Forward"], 2);
-					traveledDistance += 200 * velocity*fElapsedTime;
 					velocity -= 1.0*fElapsedTime;
-					newObstaclePos.y-=10;
+					traveledDistance += speed;
+					if (speed > 0.0f)
+						speed -= incrementValue;
+					if (speed > 0.0f)
+						newObstaclePos.y += speed / 4;
+					else
+					{
+						speed = 0;
+						newObstaclePos.y -= 5;
+
+					}
+
 					o->SetPosition(newObstaclePos);
 				}
 		SetPixelMode(olc::Pixel::NORMAL);
-		if (o->GetPosition().y < ScreenHeight()/1.8f && velocity <=	0.0f) //daca playerul sta pe loc in loc sa zboare masina o fac sa dispara din raza  vizuala
-		{
-		
-			delete o;
-			o = new ObstacleCar();
-			baccOnTracc = false;
-		}
-		//asta e ca sa revina totul la normal
-		if (o->GetPosition().y > ScreenHeight() + 10) //daca a iesit din ecran
-		{
-			delete o;
-			int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
-			while (carnumber == 0)
-				carnumber = rand() % 4;
-			o = new ObstacleCar(Vec2(rand() % (ScreenHeight()/2) + ScreenHeight() / 3, ScreenHeight() / 1.8f),carnumber);
-
-		}
-		//asta e in cazul in care eram pe loc si m am repus in miscare
-		if (!baccOnTracc) ///cod de smecher ortodox
-		{
-			if (velocity >= 0.1f)//verificam daca ne am repus in miscare
-			{
-				baccOnTracc = true;
-				int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
-
-				while (carnumber == 0)
-					carnumber = rand() % 4;
-
-				o = new ObstacleCar(Vec2(rand() % (ScreenHeight()) + ScreenHeight() / 3, ScreenHeight() / 1.8f), carnumber);
-				//generam un nou obstacol care sa apara la orizont
-			}
-		}
 	}
 	void ClearScreen()//the usual cleaning screen function called every frame
 	{
@@ -219,6 +273,7 @@ public:
 			carnumber = rand() % 4;
 		o = new ObstacleCar(Vec2(rand()%(ScreenHeight()/2)+ScreenHeight()/3, (ScreenHeight()/1.8f)),2);
 		sky = new olc::Sprite("D:\\interesting shit\\Traffic simulator\\Project1\\Project1\\Road\\Sky.png");
+		timePoint = rand() % 50;
 		return true;
 	}
 	bool OnUserUpdate(float fElapsedTime) override
@@ -226,10 +281,17 @@ public:
 		ClearScreen();
 		SetPixelMode(olc::Pixel::ALPHA);
 		DrawSprite(-100, -100, sky,3); //drawing the sky
+		actualTime++;
+		if (actualTime >= timePoint)
+		{
+			actualTime = 0;
+			timePoint = rand() % 50;
+			SpawnObstacle();//
+		}
 		SetPixelMode(olc::Pixel::NORMAL);
 		DrawTrack();
 		Dravv(fElapsedTime);
-		
+		PrintStatus();
 		return true;
 	}
 };
