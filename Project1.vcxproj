@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Car.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="ObstacleCar.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="PlayerCar.h" />

@@ -3,7 +3,6 @@
 class ObstacleCar:public Car
 {
 private:
-	bool hasBeenHit = false;
 	olc::Sprite* whichCar;
 	void SetSpriteMap();
 public:

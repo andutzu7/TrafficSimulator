@@ -1,17 +1,21 @@
 #define OLC_PGE_APPLICATION /// DE FACUT FUNCTIE PT UPDATEUL MISCARII SI REZOLVAT CANCERUL ASTA DE PROBLE,A+ADAUGAT PERSPECTIVA
-#include "olcPixelGameEngine.h"
+#include "olcPixelGameEngine.h"//////TO ADD COMMENTS\\\\\\
 #include "PlayerCar.h"
 #include "Vec2.h"
 #include <vector>
 #include <cmath>
 #include <memory>
 #include <chrono>
-#include "Tile.h"
+#include "PlayerCar.h"
 #include "ObstacleCar.h"
 //DE ADAUGAT LOGO SAU CV JOS CA SA NU SE MAI VADA BUGU ALA
 ///TO ADD MOVEMENT BASED ON TIME(aka real life physics + acceleration+more comments+  TO THE PLAYEER aand also make it use velocity
 ///////////////////////VARIABLES AREA\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+const int playerWidth = 40;
+const int playerHeight = 40;
+const int obstacleWidth = 40;
+const int obstacleHeight = 40;
 const size_t ScreenWidth = 650;//valori hardcodate,se gasesc in consola,nu mi vine nimic mai elegant in minte
 Vec2 carPos(ScreenWidth/ 2 - 40, 450); //40 e 1/2 din playerWidth
 PlayerCar c(carPos);
@@ -19,6 +23,7 @@ float traveledDistance = 0.0f;
 float velocity = 0.0f;
 olc::Sprite* sky;
 ObstacleCar* o;
+bool gameOver = false;
 const float acceleration = 9.8f;
 bool baccOnTracc;
 int timePoint=-1;
@@ -266,6 +271,26 @@ public:
 		FillRect(0, 0, ScreenWidth(), ScreenHeight(), olc::VERY_DARK_BLUE);//ClEARS THE SCREEN
 
 	}
+	bool checkCollision(const PlayerCar& a, const ObstacleCar* b)
+	{
+		const int playerright = a.GetPosition().x + playerWidth/2;
+		const int playerleft = a.GetPosition().x - playerWidth / 2;
+
+		const int playerbottom = a.GetPosition().y - playerHeight/2;
+		const int playerupper = a.GetPosition().y + playerHeight / 2;
+
+		const int obsright = b->GetPosition().x + obstacleWidth/2;
+		const int obsleft = b->GetPosition().x - obstacleWidth / 2;
+
+		const int obsbottom = b->GetPosition().y - obstacleHeight/2;
+		const int obsupper = b->GetPosition().y + obstacleHeight / 2;
+
+		return (playerright > obsleft &&
+			playerleft < obsright &&
+			playerbottom > obsupper &&
+			 playerupper < obsbottom);
+		
+	}
 	bool OnUserCreate() override
 	{
 		int carnumber = 0;//ma confrunt cu un cacat de  bug pe care nu il inteleg...
@@ -278,20 +303,26 @@ public:
 	}
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		ClearScreen();
-		SetPixelMode(olc::Pixel::ALPHA);
-		DrawSprite(-100, -100, sky,3); //drawing the sky
-		actualTime++;
-		if (actualTime >= timePoint)
+		if (!gameOver)
 		{
-			actualTime = 0;
-			timePoint = rand() % 50;
-			SpawnObstacle();//
+			ClearScreen();
+			SetPixelMode(olc::Pixel::ALPHA);
+			DrawSprite(-100, -100, sky, 3); //drawing the sky
+			actualTime++;
+			if (actualTime >= timePoint)
+			{
+				actualTime = 0;
+				timePoint = rand() % 50;
+				SpawnObstacle();//
+			}
+			SetPixelMode(olc::Pixel::NORMAL);
+			DrawTrack();
+			Dravv(fElapsedTime);
+			PrintStatus();
 		}
-		SetPixelMode(olc::Pixel::NORMAL);
-		DrawTrack();
-		Dravv(fElapsedTime);
-		PrintStatus();
+		if (checkCollision(c, o))
+			gameOver = true;
+	
 		return true;
 	}
 };
